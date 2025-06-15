@@ -209,7 +209,7 @@ Trained models are saved in organized subdirectories:
 | **XGBoost*** | 70.7% | 0.7 | 0.707 | 0.6113 |
 | **Decision Tree*** | 62.54% | 0.619 | 0.625 | 0.5096 |
 
-*_XGBoost and Decision Tree was trained with KNIME workflows using SMOTE for class balancing_
+*_XGBoost and Decision Tree was trained with KNIME workflows (under `knime_workflows` folder) using SMOTE for class balancing_*
 
 ### Class-wise Recall Performance
 
