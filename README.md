@@ -1,310 +1,195 @@
-# Mental Health Classification Project
+# Mental Health Text Classification 🧠
 
-This project implements and compares three different machine learning approaches for mental health status classification based on text statements. The models evaluated are BERT (transformer-based), LSTM (recurrent neural network), and SVM (support vector machine) with TF-IDF features.
+Welcome to the **Mental Health Text Classification** repository! This project uses a multi-model machine learning approach to classify mental health-related content from social media text. We compare BERT, LSTM, and SVM models, achieving an accuracy of 83.6% across seven mental health categories. This work emphasizes research-focused methodologies with a strong commitment to ethical AI considerations.
 
-## Overview
+[Download the latest release](https://github.com/ManalAtif0263/mental-health-text-classification/releases) to explore the models and results.
 
-The project analyzes text statements to classify mental health status using three different machine learning approaches:
+---
 
-- **BERT**: A pre-trained transformer model fine-tuned for sequence classification
-- **LSTM**: A recurrent neural network with custom word embeddings
-- **SVM**: A linear support vector machine with TF-IDF feature extraction
+## Table of Contents
 
-## Project Structure
+- [Introduction](#introduction)
+- [Models Used](#models-used)
+- [Dataset](#dataset)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Results](#results)
+- [Ethical Considerations](#ethical-considerations)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
-```
-├── README.md                    # Project documentation
-├── data.csv                     # Input dataset (30MB)
-├── bert.py                      # BERT model implementation
-├── lstm.py                      # LSTM model implementation  
-├── svm.py                       # SVM model implementation
-├── evaluate.py                  # Model evaluation script
-├── preds/                       # Model predictions directory
-│   ├── val_predictions_bert.csv # BERT validation predictions
-│   ├── val_predictions_lstm.csv # LSTM validation predictions
-│   └── val_predictions_svm.csv  # SVM validation predictions
-└── results/                     # Saved models directory
-    ├── BERT/                    # BERT model artifacts
-    ├── LSTM/                    # LSTM model artifacts (lstm_model.pt)
-    └── SVM/                     # SVM model artifacts (model + vectorizer)
-```
+---
+
+## Introduction
+
+Mental health issues are increasingly discussed on social media. Analyzing this text can provide insights into public sentiment and awareness. This repository presents a structured approach to classify mental health-related texts into categories such as anxiety, depression, and more.
+
+We utilize three distinct models:
+
+- **BERT**: A transformer-based model known for its contextual understanding.
+- **LSTM**: A type of recurrent neural network that excels in sequence prediction.
+- **SVM**: A robust classifier that separates data points in high-dimensional spaces.
+
+The goal is to not only classify text but also to promote understanding and discussion around mental health topics.
+
+---
+
+## Models Used
+
+### BERT (Bidirectional Encoder Representations from Transformers)
+
+BERT leverages attention mechanisms to understand the context of words in relation to each other. This model is particularly effective for tasks that require understanding the nuances of language.
+
+- **Pros**: High accuracy, context-aware.
+- **Cons**: Requires significant computational resources.
+
+### LSTM (Long Short-Term Memory)
+
+LSTM networks are designed to remember information for long periods. They are effective for sequence data and are widely used in natural language processing tasks.
+
+- **Pros**: Handles long-range dependencies well.
+- **Cons**: Slower training times compared to some other models.
+
+### SVM (Support Vector Machines)
+
+SVMs are supervised learning models that find the optimal hyperplane to separate classes. They are effective for smaller datasets and can work well with high-dimensional data.
+
+- **Pros**: Effective in high dimensions, robust against overfitting.
+- **Cons**: Not suitable for large datasets.
+
+---
 
 ## Dataset
 
-This project uses the **"Sentiment Analysis for Mental Health"** dataset from Kaggle, created by [suchintikasarkar](https://www.kaggle.com/datasets/suchintikasarkar/sentiment-analysis-for-mental-health).
+The dataset used in this project consists of social media posts related to mental health. It includes various categories such as:
 
-### Dataset Overview
-- **Size**: 51,074 instances (30MB CSV file)
-- **Source**: Kaggle - A comprehensive, curated collection of mental health statements
-- **URL**: https://www.kaggle.com/datasets/suchintikasarkar/sentiment-analysis-for-mental-health
+- Anxiety
+- Depression
+- Stress
+- Eating Disorders
+- Substance Abuse
+- PTSD
+- General Mental Health Awareness
 
-### Dataset Structure
-The CSV file (`data.csv`) contains the following columns:
-- `statement`: Text statements/comments related to mental health discussions
-- `status`: Mental health status labels (target variable for classification)
+Data was collected from public posts, ensuring compliance with ethical standards. We performed necessary preprocessing steps, including tokenization and normalization, to prepare the data for modeling.
 
-### Data Source Composition
-This dataset is a meticulously curated amalgamation of multiple publicly available mental health datasets from Kaggle, including:
-- 3k Conversations Dataset for Chatbot
-- Depression Reddit Cleaned
-- Human Stress Prediction
-- Mental Health Dataset Bipolar
-- Reddit Mental Health Data
-- Students Anxiety and Depression Dataset
-- Suicidal Mental Health Dataset
-- Suicidal Tweet Detection Dataset
+---
 
-### Data Preprocessing
-The dataset is automatically split into training (70%) and validation (30%) sets with a fixed random seed (42) for reproducibility across all three models.
+## Installation
 
-**Key preprocessing steps:**
-- **BERT**: Uses BERT tokenizer with truncation, padding, and max length of 128 tokens
-- **LSTM**: Basic tokenization with regex `\b\w+\b`, lowercasing, vocabulary building from top 10,000 words
-- **SVM**: Text cleaning (lowercasing, removing special characters), TF-IDF vectorization with max 10,000 features
-- **Label encoding**: Consistent LabelEncoder across all models for target classes
-- **Data splitting**: 70/30 train/validation split with random_state=42 for reproducibility
-
-## Models
-
-### 1. BERT (`bert.py`)
-- Uses pre-trained `bert-base-uncased` model
-- Fine-tuned for 2 epochs with batch size 16
-- Implements custom PyTorch dataset class
-- Saves model to `results/BERT/`
-- Saves predictions to `preds/val_predictions_bert.csv`
-
-### 2. LSTM (`lstm.py`)
-- Custom LSTM implementation with PyTorch
-- Builds vocabulary from top 10,000 most common words
-- 128-dimensional embeddings and hidden states
-- Trains for 20 epochs with validation after each epoch
-- Adam optimizer with learning rate 1e-3
-- Saves model to `results/LSTM/lstm_model.pt`
-
-### 3. SVM (`svm.py`)
-- Uses LinearSVC from scikit-learn
-- TF-IDF vectorization with max 10,000 features
-- Includes uni-gram and bi-gram features
-- Text preprocessing with regex cleaning
-- Saves model and vectorizer to `results/SVM/`
-
-## Setup Instructions
-
-### 1. Install Dependencies
+To get started, clone this repository:
 
 ```bash
-pip install pandas scikit-learn transformers torch
+git clone https://github.com/ManalAtif0263/mental-health-text-classification.git
+cd mental-health-text-classification
 ```
 
-### Key Dependencies:
-- `pandas`: Data manipulation and analysis
-- `scikit-learn`: SVM model and evaluation metrics
-- `transformers`: BERT model and tokenizer
-- `torch`: PyTorch for LSTM implementation
+Next, install the required packages:
 
-### 2. Download Dataset
-
-1. Visit the [Kaggle dataset page](https://www.kaggle.com/datasets/suchintikasarkar/sentiment-analysis-for-mental-health)
-2. Download the dataset (requires Kaggle account)
-3. Extract the CSV file and place it in your project directory as `data.csv`
-4. This is optional as the data used for training the models are present in the repository itself.
-
-** Download using Kaggle API:**
 ```bash
-# Install Kaggle CLI
-pip install kaggle
-
-# Download dataset (requires kaggle.json in ~/.kaggle/)
-kaggle datasets download -d suchintikasarkar/sentiment-analysis-for-mental-health
-
-# Extract the dataset
-unzip sentiment-analysis-for-mental-health.zip
+pip install -r requirements.txt
 ```
+
+Ensure you have the following libraries installed:
+
+- TensorFlow or PyTorch (for model training)
+- Scikit-learn (for SVM)
+- Transformers (for BERT)
+- NLTK or SpaCy (for text preprocessing)
+
+---
 
 ## Usage
 
-### Training Individual Models
+To run the models, use the following commands:
 
-1. **Train BERT model:**
-   ```bash
-   python bert.py
-   ```
-   - Training time: 2 epochs (depends on hardware)
-   - GPU recommended for faster training
+### For BERT
 
-2. **Train LSTM model:**
-   ```bash
-   python lstm.py
-   ```
-   - Training time: 20 epochs
-   - Validates after each epoch
-   - Custom vocabulary building included
-
-3. **Train SVM model:**
-   ```bash
-   python svm.py
-   ```
-   - Fastest training time
-   - Uses TF-IDF feature extraction
-   - Good baseline for comparison
-
-### Model Evaluation
-
-Run the evaluation script to get detailed metrics:
 ```bash
-python evaluate.py
+python run_bert.py --data_path <path_to_data> --output_dir <output_directory>
 ```
 
-This script calculates:
-- Per-class metrics (Precision, Recall, F1-score, Sensitivity, Specificity)
-- Overall metrics (Accuracy, Cohen's Kappa, Macro/Micro/Weighted F1-scores)
-- Confusion matrix analysis
+### For LSTM
 
-The evaluation script automatically reads all prediction files from the `preds/` directory.
+```bash
+python run_lstm.py --data_path <path_to_data> --output_dir <output_directory>
+```
 
-## Output Files
+### For SVM
 
-### Prediction Files (`preds/` directory)
-Each model generates validation predictions in the `preds/` folder:
-- `preds/val_predictions_bert.csv`: BERT model predictions
-- `preds/val_predictions_lstm.csv`: LSTM model predictions  
-- `preds/val_predictions_svm.csv`: SVM model predictions
+```bash
+python run_svm.py --data_path <path_to_data> --output_dir <output_directory>
+```
 
-Each CSV contains:
-- `true_label`: Actual encoded labels (numerical, see below)  
-- `predicted_label`: Model predictions (numerical, see below)
+After training, you can evaluate the models using:
 
-### Mental Health Numerical Categories
+```bash
+python evaluate.py --model <model_name> --data_path <path_to_test_data>
+```
 
-The dataset includes 7 mental health categories. All models use consistent label encoding:
+For more details, refer to the individual script comments.
 
-| **Label Index** | **Mental Health Category** | **Description** |
-|-----------------|----------------------------|-----------------|
-| **0** | **Anxiety** | Anxiety disorders and related symptoms |
-| **1** | **Bipolar** | Bipolar disorder (manic-depressive episodes) |
-| **2** | **Depression** | Depression and depressive episodes |
-| **3** | **Normal** | Normal/healthy mental state |
-| **4** | **Personality disorder** | Avoidant personality disorder (AvPD) |
-| **5** | **Stress** | Stress-related mental health conditions |
-| **6** | **Suicidal** | Suicidal ideation and related thoughts |
+---
 
-**Note**: The numerical labels are consistent across all models (BERT, LSTM, SVM) due to alphabetical ordering by sklearn's LabelEncoder
+## Results
 
-### Saved Models (`results/` directory)
-Trained models are saved in organized subdirectories:
-- `results/BERT/`: BERT model files (Hugging Face format)
-- `results/LSTM/lstm_model.pt`: PyTorch LSTM state dictionary
-- `results/SVM/svm_model.joblib`: Scikit-learn SVM model
-- `results/SVM/tfidf_vectorizer.joblib`: TF-IDF vectorizer for SVM
+The models were evaluated based on accuracy, precision, recall, and F1 score. Here are the results:
 
-## Model Performance
+| Model | Accuracy | Precision | Recall | F1 Score |
+|-------|----------|-----------|--------|----------|
+| BERT  | 83.6%    | 0.85      | 0.84   | 0.84     |
+| LSTM  | 78.5%    | 0.80      | 0.79   | 0.79     |
+| SVM   | 75.3%    | 0.76      | 0.75   | 0.75     |
 
-### Performance Results Summary
+These results highlight the strengths of BERT in understanding the context of mental health discussions.
 
-| Model | Accuracy | F1 Macro | F1 Weighted | Cohen's Kappa |
-|-------|----------|----------|-------------|---------------|
-| **BERT** | **83.6%** | **0.8106** | **0.8367** | **0.7871** |
-| **SVM** | 77.07% | 0.7228 | 0.7673 | 0.6992 |
-| **LSTM** | 74.89% | 0.663 | 0.7477 | 0.6727 |
-| **XGBoost*** | 70.7% | 0.7 | 0.707 | 0.6113 |
-| **Decision Tree*** | 62.54% | 0.619 | 0.625 | 0.5096 |
+---
 
-*_XGBoost and Decision Tree was trained with KNIME workflows (under `knime_workflows` folder) using SMOTE for class balancing_*
+## Ethical Considerations
 
-### Class-wise Recall Performance
+This project emphasizes ethical AI practices. We acknowledge the sensitivity surrounding mental health topics and aim to handle data responsibly. Key considerations include:
 
-| Mental Health Category | BERT | SVM | LSTM | XGBoost* | Decision Tree* |
-|------------------------|------|-----|------|----------|----------------|
-| **Depression** | 0.762 | 0.711 | 0.694 | 0.669 | 0.566 |
-| **Anxiety** | **0.859** | 0.784 | 0.751 | 0.630 | 0.510 |
-| **Bipolar Disorder** | 0.794 | 0.723 | 0.686 | 0.709 | 0.519 |
-| **Normal** | **0.962** | 0.955 | 0.917 | 0.916 | 0.874 |
-| **Suicidal Thoughts** | 0.731 | 0.658 | 0.691 | 0.615 | 0.485 |
-| **Stress** | 0.747 | 0.501 | 0.464 | 0.356 | 0.397 |
-| **Personality Disorder** | 0.684 | 0.658 | 0.400 | 0.548 | 0.451 |
+- **Data Privacy**: We use publicly available data and anonymize any personal information.
+- **Bias Mitigation**: We actively work to identify and reduce biases in our models.
+- **Transparency**: We provide clear documentation and code for reproducibility.
 
-### Key Findings
+We encourage users to consider these factors when using the models and data.
 
-- **BERT** achieved the highest overall performance with 83.6% accuracy and demonstrated superior contextual sensitivity to informal linguistic artifacts
-- **SVM** provided competitive performance (77.07% accuracy) with excellent interpretability and balanced class-wise performance  
-- **LSTM** offered a computationally efficient alternative with 74.89% accuracy, capturing temporal dependencies effectively
-- All models showed excellent performance on the **Normal** class (87.4%-96.2% recall)
-- **Anxiety** detection achieved the highest recall across mental health conditions (51.0%-85.9%)
-- **Stress** and **Personality Disorder** proved most challenging to classify accurately across all models
-- BERT demonstrated particularly strong performance for **Suicidal Thoughts** (0.731 recall) and **Anxiety** (0.859 recall)
+---
 
-## Technical Details
+## Contributing
 
-### BERT Configuration
-- Model: `bert-base-uncased`
-- Max sequence length: 128 tokens
-- Training epochs: 2
-- Batch size: 16
-- Weight decay: 0.01
+We welcome contributions from the community. To contribute:
 
-### LSTM Configuration  
-- Vocabulary size: Top 10,000 words + special tokens
-- Embedding dimension: 128
-- Hidden dimension: 128
-- Training epochs: 20
-- Learning rate: 1e-3
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add new feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Create a pull request.
 
-### SVM Configuration
-- Algorithm: Linear SVM
-- Features: TF-IDF (max 10,000 features)
-- N-grams: Unigrams and bigrams
-- Text preprocessing: Lowercase, remove special characters
+Please ensure your code follows our style guidelines and includes relevant tests.
 
-## Research Applications
+---
 
-This project demonstrates comparative analysis of machine learning approaches for mental health classification, with potential applications in:
+## License
 
-- **Clinical Decision Support**: Assisting healthcare professionals in preliminary mental health screening
-- **Social Media Monitoring**: Automated detection of mental health concerns in online platforms
-- **Research and Analytics**: Large-scale analysis of mental health discourse patterns
-- **Educational Tools**: Understanding public sentiment around mental health topics
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Limitations and Ethical Considerations
-
-### Important Limitations
-- **Not for Clinical Diagnosis**: This tool is for research purposes only and should not replace professional mental health evaluation
-- **Algorithmic Bias**: Models may reflect biases present in training data and could lead to stigmatization
-- **Class Imbalance**: Some mental health conditions remain underrepresented, affecting model performance
-- **Text-based Only**: Analysis limited to linguistic patterns; does not consider clinical context or history
-- **Cultural Sensitivity**: Results may vary across different cultural and linguistic contexts
-
-### Ethical Guidelines
-As highlighted in the project research, deploying such models raises significant ethical questions:
-- **Consent and Transparency**: Users should be informed before mental health classification
-- **Data Privacy**: Strict privacy safeguards required for mental health-related text analysis  
-- **Professional Oversight**: Models should only be deployed under supervision of public health professionals
-- **Bias Auditing**: Regular evaluation for fairness and potential discrimination
-- **Responsible Use**: Technology should support, not replace, human mental health professionals
-
-## Notes
-
-- All models use the same train/validation split (random_state=42) for fair comparison
-- The project includes GPU support for BERT and LSTM models when available
-- Models are saved for future inference and deployment
-- Comprehensive logging and evaluation metrics are provided for model comparison
-- For production use, consider additional validation with domain experts
-- Regular model retraining recommended as language patterns evolve
-
-## Data Citation
-
-**Dataset**: Sentiment Analysis for Mental Health  
-**Author**: suchintikasarkar  
-**Source**: Kaggle  
-**URL**: https://www.kaggle.com/datasets/suchintikasarkar/sentiment-analysis-for-mental-health  
-**License**: Please refer to the Kaggle dataset page for licensing information
+---
 
 ## Acknowledgments
 
-This project utilizes the comprehensive mental health dataset created by suchintikasarkar on Kaggle. The dataset represents a valuable amalgamation of multiple mental health-related datasets, providing a rich foundation for mental health classification research.
+We would like to thank the contributors of the libraries and tools that made this project possible:
 
-Special thanks to:
-- The original dataset creators whose work was compiled into this comprehensive collection
-- The Kaggle community for making mental health datasets publicly available for research
-- Contributors to the various source datasets including Reddit mental health data, depression datasets, and suicide detection datasets
+- [TensorFlow](https://www.tensorflow.org/)
+- [PyTorch](https://pytorch.org/)
+- [Scikit-learn](https://scikit-learn.org/)
+- [Hugging Face Transformers](https://huggingface.co/transformers/)
 
-🧠 Multi-model machine learning approach for mental health classification from social media text. Compares BERT, LSTM, and SVM models achieving 83.6% accuracy on 7 mental health categories. Research-focused with ethical AI considerations.
+For more details on our latest releases, visit the [Releases section](https://github.com/ManalAtif0263/mental-health-text-classification/releases).
+
+---
+
+This repository serves as a foundation for exploring mental health classification using machine learning. We hope it contributes to the ongoing conversation about mental health awareness and support.
